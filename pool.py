@@ -17,9 +17,6 @@ CONFIG_FILE = "config.json"
 IN_FILE = "in.txt"
 OUT_FILE = "out.txt"
 
-# POOL_TOKEN = "04ca198c1e65975687db630ccc4f86c39d9ed7764e7af26a636da319c140ec44"
-# ADDITIONAL_ADDRESS = "1MVDYgVaSN6iKKEsbzRUAYFrYJadLYZvvZ"
-
 # Initialize colorama
 init(autoreset=True)
 
