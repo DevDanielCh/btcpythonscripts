@@ -20,14 +20,13 @@ OUT_FILE = "out.txt"
 # Initialize colorama
 init(autoreset=True)
 
-
 def clear_screen():
     """Clears the terminal screen to provide a clean output view."""
     os.system("cls" if os.name == "nt" else "clear")
 
 
 def load_config():
-    """Carrega a configuração do arquivo JSON, ou cria uma nova se não existir."""
+    """Loads the configuration from the JSON file or creates a new one if it does not exist."""
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, "r") as file:
             return json.load(file)
@@ -35,37 +34,38 @@ def load_config():
 
 
 def save_config(config):
-    """Salva a configuração no arquivo JSON."""
+    """Saves the configuration to the JSON file."""
     with open(CONFIG_FILE, "w") as file:
         json.dump(config, file, indent=4)
     print("Configuração salva com sucesso!")
 
 
 def setup_config():
-    """Pergunta ao usuário se deseja alterar a configuração e salva os valores."""
+    """Asks the user if they want to change the configuration and saves the values."""
     config = load_config()
 
     if config:
-        print("\nConfiguração encontrada:")
-        print(f"POOL_TOKEN: {config.get('POOL_TOKEN', 'Não definido')}")
-        print(f"ADDITIONAL_ADDRESS: {config.get('ADDITIONAL_ADDRESS', 'Não definido')}")
-        print(f"COMANDO_SCAN: {config.get('COMANDO_SCAN', 'Não definido')}")
-        change = input("\nDeseja alterar a configuração? (s/n): ").strip().lower()
+        print(f"\n{Fore.CYAN}Configuração encontrada:{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}POOL_TOKEN:{Style.RESET_ALL} {config.get('POOL_TOKEN', Fore.RED + 'Não definido' + Style.RESET_ALL)}")
+        print(f"{Fore.YELLOW}ADDITIONAL_ADDRESS:{Style.RESET_ALL} {config.get('ADDITIONAL_ADDRESS', Fore.RED + 'Não definido' + Style.RESET_ALL)}")
+        print(f"{Fore.YELLOW}COMANDO_SCAN:{Style.RESET_ALL} {config.get('COMANDO_SCAN', Fore.RED + 'Não definido' + Style.RESET_ALL)}")
+        
+        change = input(f"\n{Fore.GREEN}Deseja alterar a configuração? (s/n): {Style.RESET_ALL}").strip().lower()
         if change != "s":
             return config
 
-    # Solicita novos valores ao usuário
-    config["POOL_TOKEN"] = input("Digite o POOL_TOKEN: ").strip()
-    config["ADDITIONAL_ADDRESS"] = input("Digite o ADDITIONAL_ADDRESS: ").strip()
-    config["COMANDO_SCAN"] = input(
-        "Digite o comando para escanear os ranges.\n"
-        "Use os seguintes placeholders para os valores dinâmicos:\n"
-        "- {start} representa o início do range\n"
-        "- {end} representa o fim do range\n"
-        "- {in_file} representa o nome do arquivo de entrada\n"
-        "- {out_file} representa o nome do arquivo de saída\n"
-        "Comando: "
-    ).strip()
+    print(f"\n{Fore.MAGENTA}Insira os novos valores para a configuração:{Style.RESET_ALL}")
+    config["POOL_TOKEN"] = input(f"{Fore.CYAN}Digite o POOL_TOKEN:{Style.RESET_ALL} ").strip()
+    config["ADDITIONAL_ADDRESS"] = input(f"{Fore.CYAN}Digite o ADDITIONAL_ADDRESS:{Style.RESET_ALL} ").strip()
+    
+    print(f"\n{Fore.YELLOW}Digite o comando para escanear os ranges.{Style.RESET_ALL}")
+    print(f"{Fore.BLUE}Use os seguintes placeholders para os valores dinâmicos:{Style.RESET_ALL}")
+    print(f"{Fore.YELLOW}- {{start}}{Style.RESET_ALL} representa o início do range")
+    print(f"{Fore.YELLOW}- {{end}}{Style.RESET_ALL} representa o fim do range")
+    print(f"{Fore.YELLOW}- {{in_file}}{Style.RESET_ALL} representa o nome do arquivo de entrada")
+    print(f"{Fore.YELLOW}- {{out_file}}{Style.RESET_ALL} representa o nome do arquivo de saída")
+
+    config["COMANDO_SCAN"] = input(f"{Fore.CYAN}Comando: {Style.RESET_ALL}").strip()
 
     save_config(config)
     return config
